@@ -22,9 +22,11 @@ public class InputManagerLegacy : MonoBehaviour
 
     void Update()
     {
-        //구버전 인풋매니저 VS 신버전 인풋시스템]
-        //1. 구버전 - 업데이트에서 계속 확인하니까 메모리 낭비함. 신버전 - 업데이트에서 일일이 확인하지 않고 1번만 확인한다.
-        //2. 구버전 - PC, Mob 를ile 일일이 따로 설정. 신버전 - PC, Mobile 구분없이 따로 설정하지 않아도 됨 
+        //구버전 인풋매니저 VS 신버전 인풋시스템
+        //1. 구버전 - 업데이트에서 계속 확인하니까 메모리 낭비함.
+        //   신버전 - 업데이트에서 일일이 확인하지 않고 1번만 확인한다.
+        //2. 구버전 - PC, Mob 를ile 일일이 따로 설정.
+        //   신버전 - PC, Mobile 구분없이 따로 설정하지 않아도 됨 
         h = Input.GetAxis("Horizontal");   
         v = Input.GetAxis("Vertical");
 
@@ -49,6 +51,15 @@ public class InputManagerLegacy : MonoBehaviour
             tr.rotation = Quaternion.LookRotation(movedir);                    //입력한 키보드 진행방향으로 회전
             //tr.Translate(Vector3.forward * Time.deltaTime * 4.0f);             //회전한 후 전진 방향으로 이동
             tr.Translate(Vector3.forward * Time.deltaTime * 5.0f);
+
+            if (Input.GetKeyDown(KeyCode.Space)) // 스페이스 키 입력시
+            {
+                animator.SetTrigger("Attack");
+                
+            }
+
+
+
         }
 
 
