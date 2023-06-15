@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,66 +11,62 @@ public class PlayerLegacyCtrl : MonoBehaviour
     public float speed = 5.0f;
 
 
-    void Start()  //½ÃÀÛÇÏÀÚ¸¶ÀÚ
+    void Start()                                        //(3)Â - (script í™œì„±í™”ì‹œ)Â 1íšŒ í˜¸ì¶œ / coroutine ê°€ëŠ¥
     {
-        animation = GetComponent<Animation>();          //ÀÚ½ÅÀÇ ÄÄÆÛ³ÍÆ®¿¡¼­ ÀÚµ¿À¸·Î °¡Á®¿È
-        //animation = GetComponent<Animation>();        //Á÷Á¢ ¼öµ¿À¸·Î ³Ö¾î¾ßÇÔ
+        animation = GetComponent<Animation>();          //ìŠ¤í¬ë¦½íŠ¸ ì‹œì‘ë˜ì ë§ˆì ì´ ìŠ¤í¬ë¦½íŠ¸ê°€ ë‹¬ë¦° ê°ì²´(í”Œë ˆì´ì–´)ì˜ ì»´í¼ë„ŒíŠ¸ ì¤‘ Animationì„ ìë™ìœ¼ë¡œ ì €ì¥
+        //animation = GetComponent<Animation>();        //ë§Œì¼ ì´ ë¶€ë¶„ì´ ì£¼ì„ì²˜ë¦¬ë˜ë©´ ì§ì ‘ ìˆ˜ë™ìœ¼ë¡œ ë„£ì–´ì•¼í•¨
 
-        animation.Play("Idle");                                            
+        animation.Play("Idle");                         //Loopì²˜ë¦¬ëœ Idle Animationì´ë¼ í•œë²ˆë§Œ í˜¸ì¶œí•´ë„ ë¨                                         
 
     }
 
 
     void Update()
     {
-        h = Input.GetAxis("Horizontal");
-        v = Input.GetAxis("Vertical");
+        h = Input.GetAxis("Horizontal");                                    //A,D
+        v = Input.GetAxis("Vertical");                                      //W,S
 
-        moveDir = (h * Vector3.right) + (v * Vector3.forward);                  //ÀÌµ¿¹æÇâ
-        transform.Translate(moveDir.normalized * Time.deltaTime * speed);   //normalized(Á¤±ÔÈ­) : Àß¸øµÈ °ÍÀ» °íÄ£´Ù . wd¸¦ µ¿½Ã¿¡ ´­·¶À»¶§ ÇÇÅ¸°í¶ó½º Á¤¸® 1.414·Î °¡´Â°Ô ¾Æ´Ï¶ó ¶È°°ÀÌ 1·Î °¡¾ß ÇÑ´Ù. 
-
-
+        moveDir = (h * Vector3.right) + (v * Vector3.forward);              //ì´ë™ë°©í–¥
+        transform.Translate(moveDir.normalized * Time.deltaTime * speed);   //normalized(ì •ê·œí™”) : wdë¥¼ ë™ì‹œì— ëˆŒë €ì„ë•Œ í”¼íƒ€ê³ ë¼ìŠ¤ ì •ë¦¬ 1.414ë¡œ ê°€ëŠ”ê²Œ ì•„ë‹ˆë¼ ë˜‘ê°™ì´ 1ë¡œ ê°€ì•¼ í•œë‹¤. 
 
 
-        #region     ¾Ö´Ï¸ŞÀÌ¼Ç ¿¬µ¿
 
-        if (h > 0.1f)                           // ¾ç¼öÀÌ¸é(D)
+        #region     Animation ì—°ë™
+
+        if (h > 0.1f)                           // hì¶•ì´ ì–‘ìˆ˜ì´ë©´(D)
         {
-            animation.CrossFade("RunR", 0.3f);  //CrossFade : Á÷Àü µ¿ÀÛ°ú Áö±İ ÇÏ´Â µ¿ÀÛÀ» ¾Ö´Ï¸ŞÀÌ¼ÇÀ» È¥ÇÕÇØ¼­ ºÎµå·¯¿î ¾Ö´Ï¸ŞÀÌ¼ÇÀ» ¸¸µç´Ù. ex) W¿Í D¸¦ ¼¯¾î¼­ ºÎµå·´°Ô Ç¥Çö
+            animation.CrossFade("RunR", 0.3f);  //RunR í´ë¦½ìœ¼ë¡œ ì„œì„œíˆ ì „í™˜
+                                                //CrossFade(í´ë¦½ëª…, ì „í™˜ì— ê±¸ë¦¬ëŠ” ì‹œê°„) : ì´ì „ ë™ì‘ê³¼ ì§€ê¸ˆ ë™ì‘ì˜ ì• ë‹ˆë©”ì´ì…˜ì„ ë¶€ë“œëŸ½ê²Œ ë¸”ë Œë”©í•´ì„œ ì„œì„œíˆ ì „í™˜. ex) W ì¤‘ì— Dë¥¼ ì„ì–´ì„œ ë¶€ë“œëŸ½ê²Œ í‘œí˜„
 
         }
-        else if (h < -0.1f)                     //À½¼öÀÌ¸é(A) 
+        else if (h < -0.1f)                     // hì¶•ì´ ìŒìˆ˜ì´ë©´(A) 
         {
             animation.CrossFade("RunL", 0.3f);
 
         }
-        else if (v > 0.1f)                      //¾ç¼öÀÌ¸é(W) 
+        else if (v > 0.1f)                      //vì¶•ì´ ì–‘ìˆ˜ì´ë©´(W) 
         {
             animation.CrossFade("RunF", 0.3f);
         }
-        else if (v < -0.1f)                     //À½¼öÀÌ¸é(S) 
+        else if (v < -0.1f)                     //vì¶•ì´ ìŒìˆ˜ì´ë©´(S) 
         {
             animation.CrossFade("RunB", 0.3f);
         }
-        else 
+        else                                    //ì•„ë¬´ ì…ë ¥ í‚¤ê°€ ì—†ì„ ê²½ìš°
         {
             animation.CrossFade("Idle", 0.3f);
         }
-        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W))     //shiftÅ°¿Í W¸¦ µ¿½Ã¿¡ ´©¸£¸é (ÁúÁÖ)
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W))     //shiftí‚¤ì™€ Wë¥¼ ë™ì‹œì— ëˆ„ë¥´ë©´ (ì§ˆì£¼)
         {
-            animation.CrossFade("SprintF", 0.3f);
-            speed = 10f;                                                    //¾÷µ¥ÀÌÆ®¿¡¼­ °è¼Ó ¼Óµµ ´©ÀûµÊ
+            animation.CrossFade("SprintF", 0.3f);                           
+            speed = 10f;                                                    //ì´ëŒ€ë¡œë§Œ ë†”ë‘ë©´ Update() ì˜ì—­ì—ì„œ ê³„ì† ëˆ„ì ë¨
         }
-        else if (Input.GetKeyUp(KeyCode.LeftShift))                         //shift Å°¸¦ ¶¼¸é (ÁúÁÖ ¾Æ´Ò ¶§)
+        else if (Input.GetKeyUp(KeyCode.LeftShift))                         //shift í‚¤ë¥¼ ë–¼ë©´ (ì§ˆì£¼ ì•„ë‹ ë•Œ)
         {
             speed = 5f;
         }
 
         #endregion
-
-
-
-
 
 
     }
