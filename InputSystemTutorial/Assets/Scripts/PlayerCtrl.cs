@@ -3,7 +3,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;                      //InputSystem 라이브러리 추가
+using UnityEngine.InputSystem;                      //InputSystem 라이브러리 호출
 
 
 
@@ -12,7 +12,7 @@ public class PlayerCtrl : MonoBehaviour
 {
 
     private Animator anim;
-    private new Transform transform;    //상속받은 부모 클래스의 함수 숨기기를 방지하기 위해서?
+    private new Transform transform;    //new - 부모 클래스로부터 파생된 자식 클래스를 생성할 때 "new" 키워드를 사용하여 부모 클래스의 멤버를 가려서 자식 클래스에 새로운 멤버를 정의
     private Vector3 moveDir;            //입력은 2차원이지만 실제 움직이는 건 3차원
 
 
@@ -70,6 +70,7 @@ public class PlayerCtrl : MonoBehaviour
 
     private void Update()
     {
+        //방향전환
         if (moveDir != Vector3.zero)            //움직인다면  
         {
             //입력한 키보드 진행방향으로 회전 
@@ -82,25 +83,23 @@ public class PlayerCtrl : MonoBehaviour
 
 
 
-    #region SEND_MESSAGE                //SEND_MESSAGE에 관련된 지역 필드 
 
-    void OnMove(InputValue _value)      //Player Input에서 SendMessage로 On만 붙여서 호출함
+    #region SEND_MESSAGE                             //Player Input - Send Message에 관련된 지역 
+
+    void OnMove(InputValue _value)                   //Player Input에서 SendMessage로 On만 붙여서 호출함
     {
-        Vector2 dir = _value.Get<Vector2>();            //입력은 2차원
-        moveDir = new Vector3(dir.x, 0f, dir.y);        //움직이는 건 3차원
-        anim.SetFloat("Movement", dir.magnitude);
+        Vector2 dir = _value.Get<Vector2>();         //입력은 2차원
+        //Debug.Log($"Move = ({dir.x},{dir.y})");    //모든 로그 기록은 메모리를 잡아먹으므로 출시 전에는 지우거나 주석으로만 남겨놔야 함
 
-        //Debug.Log($"Move = ({dir.x},{dir.y})");   //메모리 잡아먹으므로 출시 전에는 주석 또는 지워야 함
-
+        moveDir = new Vector3(dir.x, 0f, dir.y);     //움직이는 건 3차원
+        anim.SetFloat("Movement", dir.magnitude);    //dir.magnitude(= dir.x, dir.y의 크기)만큼 이동 
     }
 
-    void OnAttack()                     //Player Input에서 SendMessage로 On만 붙여서 호출함
+    void OnAttack()                                  //Player Input에서 SendMessage로 On만 붙여서 호출함
     {
-
-        //Debug.Log($"Attack");
+        //Debug.Log($"Attack");                         
 
         anim.SetTrigger("Attack");
-
     }
 
     #endregion
@@ -109,24 +108,24 @@ public class PlayerCtrl : MonoBehaviour
 
 
 
-    #region INVOKE_UNITY_EVENTS         //INVOKE_UNITY_EVENTS에 관련된 지역 필드
+    #region INVOKE_UNITY_EVENTS              //Player Input - Invoke Unity Event에 관련된 지역
 
-    
-    //Invoke UnityEvents 옵션을 사용해 연결한 함수는 총 3번 호출된다.
-    // 즉 Input Action에 정의한 액션은 시작started / 실행performed / 취소canceled 콜백함수를 각각 한번씩 호출하며, 어떤 상태로 호출됐는지에 대한 정보는 CallbackContext.phase 속성을 통해서 알 수 있다.
-    // 샌드메시지 방식보다 선호하는 방식
+    // Invoke Unity Events 옵션을 사용해 연결한 함수는 총 3번 호출된다.
+    // 이벤트가 발생할 때마다 세 가지 해당 콜백 함수가 호출되어 원하는 동작을 수행한다.
+    // 즉 Input Action에 정의한 동작 모션을
+    // 시작started / 실행performed / 취소canceled 해당 콜백 함수를 각각 한번씩 호출하고, 
+    // 어떤 상태로 호출됐는지에 대한 정보는 CallbackContext.phase 속성을 통해서 알 수 있다.
 
-    public void OnMove(InputAction.CallbackContext _context) 
+
+    public void OnMove(InputAction.CallbackContext _context)
     {
         Vector2 dir = _context.ReadValue<Vector2>();
         moveDir = new Vector3(dir.x, 0f, dir.y);
         anim.SetFloat("Movement", dir.magnitude);       //dir.magnitude(= dir.x, dir.y의 크기)만큼 이동 
-
     }
 
-    public void OnAttack(InputAction.CallbackContext _context) 
+    public void OnAttack(InputAction.CallbackContext _context)
     {
-
         Debug.Log($"_context.phase = {_context.phase}");    //어떤 실행 단계인지, 실행중인 단계인지 
 
 
@@ -141,9 +140,6 @@ public class PlayerCtrl : MonoBehaviour
     }
 
     #endregion
-
-
-
 
 
 

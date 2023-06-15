@@ -1,8 +1,8 @@
 
-# pragma warning disable IDE0051                    //함수를 선언하고 호출하지 않으면 경고가 뜨는 것을 막는 코드
+# pragma warning disable IDE0051                    //경고 막는 코드 : 함수 선언 후 비호출시 뜨는 경고를 막음
 using System.Collections;
-using System.Collections.Generic;                   //비활성화
-using UnityEngine;                                  //활성화
+using System.Collections.Generic;                   //비활성화 : 사용되지 않은 라이브러리
+using UnityEngine;                                  //활성화 : 사용된 라이브러리
 using UnityEngine.InputSystem;                      //InputSystem 라이브러리 호출
 
 
@@ -54,7 +54,7 @@ public class PlayerCtrlByEvent : MonoBehaviour
         };
 
         moveAction.Enable();                                                                     //Move 액션 활성화
-        attackAction = new InputAction("Attack", InputActionType.Button, "<Keyboard>/space");    //Attack 액션의 활성화,    팁 : 매개변수에 ,를 넣어 파악 
+        attackAction = new InputAction("Attack", InputActionType.Button, "<Keyboard>/space");    //Attack 액션의 활성화    (Tip : 매개변수에 ,를 넣어 파악) 
 
  
         attackAction.performed += ctx =>                        //Attack Action의 Performed 이벤트 연결
